@@ -56,12 +56,20 @@ def hello_world():
 def predict_jaundice():
     try:
         # Make sure an image file was included in the request
-        if 'image' not in request.files:
+        request_data = request.get_json()
+        if 'image' not in request_data:
+            print('no image provided')
             return jsonify({'error': 'No image provided'}), 400
 
-        # Read and preprocess the image
-        file_bytes = request.files['image'].read()
-        image = Image.open(io.BytesIO(file_bytes)).convert('RGB')
+        # Save the image to a temporary folder
+        image_data = base64.b64decode(request_data['image'])
+        image_path = 'tmp/uploaded_image.jpg'
+        os.makedirs('tmp', exist_ok=True)
+        with open(image_path, 'wb') as f:
+            f.write(image_data)
+
+        # Load the image from the temporary folder
+        image = Image.open(image_path).convert('RGB')
         image_tensor = transform(image).unsqueeze(0).to(device)
 
         # Predict using the loaded model

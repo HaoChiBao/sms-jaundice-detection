@@ -1,15 +1,12 @@
-import fs from 'fs';
-
-async function predict(filePath) {
-    const imageBuffer = fs.readFileSync(filePath);
-    const base64Image = imageBuffer.toString('base64');
+async function predict(imageBlob) {
+    // console.log(imageBlob)
 
     const response = await fetch('http://localhost:8000/predict', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ image: base64Image })
+        body: JSON.stringify({ image: imageBlob })
     });
 
     if (!response.ok) {
@@ -17,8 +14,8 @@ async function predict(filePath) {
     }
 
     const data = await response.json();
-    console.log(data)
-    return data.prediction;
+    return data;
 }
 
-export default predict;
+
+export default predict

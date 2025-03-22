@@ -8,6 +8,7 @@ import path from 'path';
 import { URL } from 'url';
 
 import predict from './services/predict.js';
+import imageToBase64 from './services/imageToBlob.js';
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -56,9 +57,14 @@ app.post('/webhook', async (req, res) => {
                             });
                             fileStream.on('error', reject);
                         });
-    
-                        const prediction = await predict(filePath);
-                        console.log(`Prediction result: ${prediction}`);
+                        
+                        const base64Image = await imageToBase64(filePath)
+                        const prediction = await predict(base64Image);
+                        // return jsonify({
+                        //     'prediction_num': pred.item(),
+                        //     'prediction_str': prediction_str
+                        // })
+                        console.log(prediction);
                     })
                     .catch(error => console.error('Error downloading image:', error))
                 );
