@@ -6,7 +6,7 @@ from PIL import Image
 # Configuration
 ##############################
 JAUNDICE_MODEL_PATH = 'jaundice_model_new_weights.pth'  # Update if needed
-TEST_IMAGE_PATH = 'normal.jpg'                  # Update to your local image
+TEST_IMAGE_PATH = 'jaundice_test.jpg'                  # Update to your local image
 
 ##############################
 # Load Model
@@ -33,7 +33,7 @@ def load_jaundice_model():
 model = load_jaundice_model()
 
 # Class names for your 2-class problem
-jaundice_classes = ['No Jaundice', 'Jaundice']
+jaundice_classes = ['Jaundice', 'No Jaundice']
 
 ##############################
 # Define Transforms
