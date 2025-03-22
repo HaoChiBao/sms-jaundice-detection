@@ -1,18 +1,76 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const twilio = require('twilio');
+import 'dotenv/config';
+import express from 'express';
+import bodyParser from 'body-parser';
+import twilio from 'twilio';
+import fs from 'fs';
+import fetch from 'node-fetch';
+import path from 'path';
+import { URL } from 'url';
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const { MessagingResponse } = twilio.twiml;
+const __dirname = path.dirname(decodeURIComponent(new URL(import.meta.url).pathname)).replace(/^\/([A-Za-z]):\//, '$1:/');
+const TMP_FOLDER = path.join(__dirname, 'tmp');
+if (!fs.existsSync(TMP_FOLDER)) {
+    fs.mkdirSync(TMP_FOLDER, { recursive: true });
+}
 
-app.post('/sms', (req, res) => {
+app.post('/webhook', async (req, res) => {
+    console.log(`Incoming message from ${req.body.From}: ${req.body.Body}`);
+
+    const numMedia = parseInt(req.body.NumMedia, 10);
+    if (numMedia > 0) {
+        let saveOperations = [];
+        for (let i = 0; i < numMedia; i++) {
+            const mediaUrl = req.body[`MediaUrl${i}`];
+            const contentType = req.body[`MediaContentType${i}`];
+            const mediaSid = path.basename(new URL(mediaUrl).pathname);
+            const fileExtension = contentType.split('/')[1] || 'jpg';
+            const filePath = path.join(TMP_FOLDER, `${mediaSid}.${fileExtension}`);
+
+            if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+                console.error('Twilio credentials missing in .env file');
+                continue;
+            }
+
+            saveOperations.push(
+                fetch(mediaUrl, {
+                    headers: {
+                        Authorization: `Basic ${Buffer.from(`${process.env.TWILIO_ACCOUNT_SID}:${process.env.TWILIO_AUTH_TOKEN}`).toString('base64')}`
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
+                    const fileStream = fs.createWriteStream(filePath);
+                    response.body.pipe(fileStream);
+                    return new Promise((resolve, reject) => {
+                        fileStream.on('finish', () => {
+                            console.log(`Image saved: ${filePath}`);
+                            resolve();
+                        });
+                        fileStream.on('error', reject);
+                    });
+                })
+                .catch(error => console.error('Error downloading image:', error))
+            );
+        }
+        await Promise.all(saveOperations);
+    }
+
     const twiml = new MessagingResponse();
-    twiml.message(`Hello, ${req.body.From}. You said: "${req.body.Body}"`);
-    
+
+    if (numMedia > 0){
+        twiml.message(`Image Received`);
+    }
+    else {
+        twiml.message(`You said: "${req.body.Body}"`);
+    }
+
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
 });
 
-app.listen(3000, () => console.log('Webhook running on port 3000'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
