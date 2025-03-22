@@ -14,7 +14,11 @@
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "image-js": "^0.36.0",
+    "node-fetch": "^3.3.2",
     "nodemon": "^3.1.9",
+    "pytorch": "^0.0.1",
+    "torch": "^0.2.7",
     "twilio": "^5.5.1"
   }
 }
