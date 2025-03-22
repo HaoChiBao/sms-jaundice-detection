@@ -6,6 +6,19 @@ import base64
 import io
 import os
 
+device = None
+device_str = None
+if torch.cuda.is_available():
+    print("CUDA working")
+    device_str = 'cuda'
+else:
+    print("CUDA not working - running on CPU")
+    device_str = 'cpu'
+
+
+device = torch.device(device_str)
+print(f"Running on device: {device}")
+
 app = Flask(__name__)
 
 def loadModel(num_classes, file):
@@ -13,10 +26,11 @@ def loadModel(num_classes, file):
     num_ftrs = model.classifier.in_features
     model.classifier = torch.nn.Linear(num_ftrs, num_classes)
 
-    # Move the model to the appropriate device (GPU if available)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
-    model.load_state_dict(torch.load(file, map_location=device))
+    if device.type == 'cpu':
+        model.load_state_dict(torch.load(file, map_location=device))
+    else:
+        model.load_state_dict(torch.load(file))
     model.eval()
     return model
 
@@ -32,35 +46,41 @@ transform = transforms.transforms.Compose([
                          [0.229, 0.224, 0.225])
 ])
 
+jaundice_classes = ['No Jaundice', 'Jaundice']
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
 
 @app.route('/predict', methods=['POST'])
-def predict():
+def predict_jaundice():
     try:
-        mode = request.args.get('mode', default='default_mode', type=str)
-        print(f"Received request - predicting for {mode}")
-
-        # Extract image from the POST request and preprocess for classification
+        # Make sure an image file was included in the request
         if 'image' not in request.files:
             return jsonify({'error': 'No image provided'}), 400
 
-        image = request.files['image'].read()
-        image = Image.open(io.BytesIO(image)).convert('RGB')
-        image = transform(image).unsqueeze(0)
+        # Read and preprocess the image
+        file_bytes = request.files['image'].read()
+        image = Image.open(io.BytesIO(file_bytes)).convert('RGB')
+        image_tensor = transform(image).unsqueeze(0).to(device)
 
-        # Make prediction
+        # Predict using the loaded model
         with torch.no_grad():
-            output = model(image)
-            _, pred = torch.max(output, 1)
+            output = model(image_tensor)
+            _, pred = torch.max(output, 1)  # Highest score index
 
-        print(f"Prediction for {mode}: {pred.item()}")
-        return jsonify({'prediction_num': pred.item()})
+        # Optionally map the predicted index to a string
+        prediction_str = jaundice_classes[pred.item()]
+        print(f"Prediction: {pred.item()} = {prediction_str}")
+
+        return jsonify({
+            'prediction_num': pred.item(),
+            'prediction_str': prediction_str
+        })
     except Exception as e:
         print(f"Error during prediction: {e}")
-        return jsonify({'error': 'An error occurred during prediction'}), 500
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    print('running on port:', 8000)
+    print('Running on port: 8000')
     app.run(debug=True, port=8000)
