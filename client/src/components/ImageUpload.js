@@ -1,7 +1,6 @@
 // src/components/ImageUpload.js
 
 import React, { useState } from 'react';
-import axios from 'axios';
 import './ImageUpload.css';  
 
 const ImageUpload = () => {

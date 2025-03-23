@@ -3,7 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const Map = () => {
+const Map = ({locationNames}) => {
+  console.log(locationNames)
   const [locations, setLocations] = useState([]);
 
   const fetchCoordinates = async (location) => {
@@ -21,12 +22,13 @@ const Map = () => {
   };
 
   useEffect(() => {
-    const locationNames = [
-      'Toronto, Ontario, Canada',
-      'Vancouver, British Columbia, Canada',
-      'Montreal, Quebec, Canada',
-      'Calgary, Alberta, Canada'
-    ];
+    // const locationNames = [
+    //   'Toronto, Ontario, Canada',
+    //   'Vancouver, British Columbia, Canada',
+    //   'Montreal, Quebec, Canada',
+    //   'Calgary, Alberta, Canada',
+    //   'Lagos, Nigeria'
+    // ];
 
     const fetchAllLocations = async () => {
       const fetchedLocations = await Promise.all(locationNames.map(fetchCoordinates));

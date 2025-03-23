@@ -1,12 +1,12 @@
 import React from 'react';
 import './StatCards.css';
 
-function StatCards() {
+function StatCards({ locations }) {
   return (
     <div className="stats-row">
       <div className="stat-card">
         <div className="stat-info">
-          <h3>175</h3>
+          <h3>{locations.length}</h3>
           <p>Total Jaundice Cases</p>
         </div>
         <div className="stat-icon purple-icon">

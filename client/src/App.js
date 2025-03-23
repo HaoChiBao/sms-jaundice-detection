@@ -9,7 +9,17 @@ import FieldOperator from './components/FieldOperator';
 import ActiveCamps from './components/ActiveCamps';
 import ImageUpload from './components/ImageUpload';
 
+import { useState, useEffect } from 'react';
+
 function App() {
+  const [locations, setLocations] = useState([
+      'Toronto, Ontario, Canada',
+      'Vancouver, British Columbia, Canada',
+      'Montreal, Quebec, Canada',
+      'Calgary, Alberta, Canada',
+      'Lagos, Nigeria'
+  ]);
+
   return (
     <div className="dashboard">
       <Header />
@@ -18,10 +28,10 @@ function App() {
         <Sidebar />
         
         <div className="main-content">
-          <StatCards />
+          <StatCards locations = {locations}/>
           
           <div className="content-row">
-            <Map />
+            <Map locationNames = {locations}/>
             <Analytics />
           </div>
           
