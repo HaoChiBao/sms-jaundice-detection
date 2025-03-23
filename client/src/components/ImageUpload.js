@@ -27,11 +27,20 @@ const ImageUpload = () => {
         formData.append('image', image);
         
         try {
-            const response = await axios.post('http://localhost:3000/upload', formData, {
+            const response = await fetch('http://localhost:3000/upload', {
+                method: 'POST',
+                body: formData,
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json',
                 },
             });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setPrediction(data.prediction);
             setPrediction(response.data.prediction);
         } catch (err) {
             setError('An error occurred while submitting the image.');
