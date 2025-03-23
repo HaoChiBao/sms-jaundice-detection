@@ -22,10 +22,19 @@ if (!fs.existsSync(TMP_FOLDER)) {
 
 app.post('/webhook', async (req, res) => {
     try {
+        
+        const numMedia = parseInt(req.body.NumMedia, 10);
+        const twiml = new MessagingResponse();
+    
+        if (numMedia > 0){
+            twiml.message(`Image Received`);
+        }
+        else {
+            twiml.message(`You said: "${req.body.Body}"`);
+        }
 
         console.log(`Incoming message from ${req.body.From}: ${req.body.Body}`);
     
-        const numMedia = parseInt(req.body.NumMedia, 10);
         if (numMedia > 0) {
             let saveOperations = [];
             for (let i = 0; i < numMedia; i++) {
@@ -65,20 +74,12 @@ app.post('/webhook', async (req, res) => {
                         //     'prediction_str': prediction_str
                         // })
                         console.log(prediction);
+                        twiml.message(prediction.prediction_str);
                     })
                     .catch(error => console.error('Error downloading image:', error))
                 );
             }
             await Promise.all(saveOperations);
-        }
-    
-        const twiml = new MessagingResponse();
-    
-        if (numMedia > 0){
-            twiml.message(`Image Received`);
-        }
-        else {
-            twiml.message(`You said: "${req.body.Body}"`);
         }
     
         res.writeHead(200, { 'Content-Type': 'text/xml' });

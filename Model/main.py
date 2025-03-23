@@ -35,7 +35,7 @@ def loadModel(num_classes, file):
     return model
 
 # Load the jaundice model
-model = loadModel(2, 'jaundice_model_weights.pth')
+model = loadModel(2, 'jaundice_model_new_weights.pth')
 
 # Define the image transformation
 transform = transforms.transforms.Compose([
@@ -46,7 +46,7 @@ transform = transforms.transforms.Compose([
                          [0.229, 0.224, 0.225])
 ])
 
-jaundice_classes = ['No Jaundice', 'Jaundice']
+jaundice_classes = ['Jaundice', 'No Jaundice']
 
 @app.route('/')
 def hello_world():
