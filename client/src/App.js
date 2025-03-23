@@ -12,13 +12,7 @@ import ImageUpload from './components/ImageUpload';
 import { useState, useEffect } from 'react';
 
 function App() {
-  const [locations, setLocations] = useState([
-      'Toronto, Ontario, Canada',
-      'Vancouver, British Columbia, Canada',
-      'Montreal, Quebec, Canada',
-      'Calgary, Alberta, Canada',
-      'Lagos, Nigeria'
-  ]);
+  const [locations, setLocations] = useState([]);
 
   useEffect(() => {
     fetch('https://c8d6-72-136-117-179.ngrok-free.app/locations')
