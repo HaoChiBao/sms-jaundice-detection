@@ -37,7 +37,7 @@ const Map = ({locationNames}) => {
     };
 
     fetchAllLocations();
-  }, []);
+  }, [locationNames]);
 
   return (
     <MapContainer center={[43.7, -79.42]} zoom={4} style={{ height: '50vh', width: '100%' }}>
