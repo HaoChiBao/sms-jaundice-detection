@@ -58,15 +58,15 @@
   }
   
   .low {
-    background-color: #ffcb3b;
+    background-color: #4dff91;
   }
   
   .medium {
-    background-color: #3bcdff;
+    background-color: #ff9f3b;
   }
   
   .severe {
-    background-color: #ff3b8f;
+    background-color: #ff3b3b;
   }
   
   .legend-item p {
