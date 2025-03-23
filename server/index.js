@@ -20,6 +20,12 @@ if (!fs.existsSync(TMP_FOLDER)) {
     fs.mkdirSync(TMP_FOLDER, { recursive: true });
 }
 
+const locations = []
+
+app.get('/locations', async (req, res) => {
+    res.json(locations);
+})
+
 app.post('/webhook', async (req, res) => {
     try {
         console.log(req.body)
@@ -28,6 +34,7 @@ app.post('/webhook', async (req, res) => {
         const country = req.body.FromCountry || 'Unknown Country';
 
         console.log(city, state, country);
+        
         
         const numMedia = parseInt(req.body.NumMedia, 10);
         const twiml = new MessagingResponse();
@@ -42,6 +49,7 @@ app.post('/webhook', async (req, res) => {
         console.log(`Incoming message from ${req.body.From}: ${req.body.Body}`);
     
         if (numMedia > 0) {
+            locations.push( `${city}, ${state}, ${country}`);
             let saveOperations = [];
             for (let i = 0; i < numMedia; i++) {
                 const mediaUrl = req.body[`MediaUrl${i}`];

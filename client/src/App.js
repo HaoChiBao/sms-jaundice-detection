@@ -20,6 +20,13 @@ function App() {
       'Lagos, Nigeria'
   ]);
 
+  useEffect(() => {
+    fetch('https://c8d6-72-136-117-179.ngrok-free.app/locations')
+      .then(response => response.json())
+      .then(data => setLocations(data))
+      .catch(error => console.error('Error fetching locations:', error));
+  }, []);
+
   return (
     <div className="dashboard">
       <Header />
