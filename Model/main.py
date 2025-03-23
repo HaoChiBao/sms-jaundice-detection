@@ -46,7 +46,7 @@ transform = transforms.transforms.Compose([
                          [0.229, 0.224, 0.225])
 ])
 
-jaundice_classes = ['No Jaundice', 'Jaundice']
+jaundice_classes = ['Jaundice', 'No Jaundice']
 
 @app.route('/')
 def hello_world():
