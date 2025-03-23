@@ -1,23 +1,26 @@
-import React from 'react';
-import './Analytics.css';
-import duck from './duck.jpeg';
+import React from "react";
+import "./Analytics.css";
+import duck from "./normal580.jpg";
 
 function Analytics() {
   // replace this with actual logic to determine jaundice status
   const jaundiceStatus = "Not Likely"; // or "Highly Likely"
-  const statusColor = jaundiceStatus === "Highly Likely" ? "#ff4d9e" : "#4dff9e";
-  
+  const statusColor =
+    jaundiceStatus === "Highly Likely" ? "#ff4d9e" : "#4dff9e";
+
   return (
     <div className="card">
       <div className="card-title">
-        <span><b>Diagnosis</b></span>
+        <span>
+          <b>Diagnosis</b>
+        </span>
         <button className="collapse-button">−</button>
       </div>
       <div className="chart-container">
         <div className="image-container">
-          <img 
-            src={duck} 
-            alt="Jaundice Analysis" 
+          <img
+            src={duck}
+            alt="Jaundice Analysis"
             className="analysis-image"
             width="160"
             height="160"
