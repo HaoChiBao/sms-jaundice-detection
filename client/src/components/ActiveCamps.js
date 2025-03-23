@@ -13,7 +13,7 @@ function ActiveCamps() {
   return (
     <div className="card">
       <div className="card-title">
-        <span>Active Medical Camps</span>
+        <span><b>Active Medical Camps</b></span>
       </div>
       <div className="camps-list">
         {camps.map(camp => (

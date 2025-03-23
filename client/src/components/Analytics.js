@@ -10,7 +10,7 @@ function Analytics() {
   return (
     <div className="card">
       <div className="card-title">
-        <span>Analytics</span>
+        <span><b>Diagnosis</b></span>
         <button className="collapse-button">−</button>
       </div>
       <div className="chart-container">

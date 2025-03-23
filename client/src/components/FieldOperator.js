@@ -13,7 +13,7 @@ function FieldOperator() {
   return (
     <div className="card">
       <div className="card-title">
-        <span>Field Doctors</span>
+        <span><b>Field Doctors</b></span>
       </div>
       <div className="field-doctors">
         <table className="doctors-table">
