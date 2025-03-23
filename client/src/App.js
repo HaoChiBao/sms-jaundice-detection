@@ -15,20 +15,23 @@ function App() {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    fetch('https://c8d6-72-136-117-179.ngrok-free.app/locations')
+    fetch('https://c8d6-72-136-117-179.ngrok-free.app/locations', {
+    // fetch('http://localhost:3000/locations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {},
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
-        }
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new TypeError("Received response is not JSON");
         }
         return response.json();
       })
       .then(data => {
         console.log(data);
-        setLocations(data)
+        setLocations(data);
       })
       .catch(error => console.error('Error fetching locations:', error));
   }, []);

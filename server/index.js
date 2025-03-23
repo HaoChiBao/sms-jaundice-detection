@@ -7,11 +7,14 @@ import fetch from 'node-fetch';
 import path from 'path';
 import { URL } from 'url';
 
+
 import predict from './services/predict.js';
 import imageToBase64 from './services/imageToBlob.js';
+import cors from 'cors';
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 const MessagingResponse = twilio.twiml.MessagingResponse;
 const __dirname = path.dirname(decodeURIComponent(new URL(import.meta.url).pathname)).replace(/^\/([A-Za-z]):\//, '$1:/');
@@ -28,8 +31,8 @@ const locations = [
     'Lagos, Nigeria'
 ]
 
-app.get('/locations', async (_, res) => {
-    res.json(locations);
+app.post('/locations', async (req, res) => {
+    res.send(locations);
 })
 
 app.post('/webhook', async (req, res) => {
