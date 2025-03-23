@@ -1,7 +1,10 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 async function predict(imageBlob) {
     // console.log(imageBlob)
 
-    const response = await fetch('http://localhost:8000/predict', {
+    const response = await fetch(`${process.env.MODEL_URL}/predict`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
