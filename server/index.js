@@ -22,6 +22,12 @@ if (!fs.existsSync(TMP_FOLDER)) {
 
 app.post('/webhook', async (req, res) => {
     try {
+        console.log(req.body)
+        const city = req.body.FromCity || 'Unknown City';
+        const state = req.body.FromState || 'Unknown State';
+        const country = req.body.FromCountry || 'Unknown Country';
+
+        console.log(city, state, country);
         
         const numMedia = parseInt(req.body.NumMedia, 10);
         const twiml = new MessagingResponse();

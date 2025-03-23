@@ -91,4 +91,4 @@ def predict_jaundice():
 
 if __name__ == '__main__':
     print('Running on port: 8000')
-    app.run(debug=True, port=8000)
+    app.run(port=8000)
