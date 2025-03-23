@@ -3,7 +3,7 @@ import torch
 from torchvision import models, transforms
 from PIL import Image
 import base64
-import io
+# import io
 import os
 
 device = None
