@@ -20,9 +20,16 @@ function App() {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new TypeError("Received response is not JSON");
+        }
         return response.json();
       })
-      .then(data => setLocations(data))
+      .then(data => {
+        console.log(data);
+        setLocations(data)
+      })
       .catch(error => console.error('Error fetching locations:', error));
   }, []);
 
