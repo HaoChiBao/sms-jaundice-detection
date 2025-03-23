@@ -15,7 +15,7 @@ function App() {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    fetch("https://c8d6-72-136-117-179.ngrok-free.app/locations", {
+    fetch("https://sms-jaundice-detection-production.up.railway.app/locations", {
       // fetch('http://localhost:3000/locations', {
       method: "POST",
       headers: {
