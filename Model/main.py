@@ -38,12 +38,19 @@ def loadModel(num_classes, file):
 model = loadModel(2, 'jaundice_model_new_weights.pth')
 
 # Define the image transformation
-transform = transforms.transforms.Compose([
-    transforms.Resize((256, 256)),
+# transform = transforms.transforms.Compose([
+#     transforms.Resize((256, 256)),
+#     transforms.Grayscale(num_output_channels=3),
+#     transforms.ToTensor(),
+#     transforms.Normalize([0.485, 0.456, 0.406],
+#                          [0.229, 0.224, 0.225])
+# ])
+
+transform = transforms.Compose([
+    transforms.Resize((128, 128)),  # Reduce image size
     transforms.Grayscale(num_output_channels=3),
     transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406],
-                         [0.229, 0.224, 0.225])
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
 
 jaundice_classes = ['Jaundice', 'No Jaundice']
