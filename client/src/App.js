@@ -16,7 +16,12 @@ function App() {
 
   useEffect(() => {
     fetch('https://c8d6-72-136-117-179.ngrok-free.app/locations')
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => setLocations(data))
       .catch(error => console.error('Error fetching locations:', error));
   }, []);

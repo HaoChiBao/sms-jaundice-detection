@@ -20,9 +20,15 @@ if (!fs.existsSync(TMP_FOLDER)) {
     fs.mkdirSync(TMP_FOLDER, { recursive: true });
 }
 
-const locations = []
+const locations = [
+    'Toronto, Ontario, Canada',
+    'Vancouver, British Columbia, Canada',
+    'Montreal, Quebec, Canada',
+    'Calgary, Alberta, Canada',
+    'Lagos, Nigeria'
+]
 
-app.get('/locations', async (req, res) => {
+app.get('/locations', async (_, res) => {
     res.json(locations);
 })
 
