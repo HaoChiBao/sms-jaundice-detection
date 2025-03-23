@@ -6,7 +6,7 @@ from PIL import Image
 # Configuration
 ##############################
 JAUNDICE_MODEL_PATH = 'jaundice_model_new_weights.pth'  # Update if needed
-TEST_IMAGE_PATH = 'jaundice_test.jpg'                  # Update to your local image
+TEST_IMAGE_PATH = 'jaundice1.jpg'                  # Update to your local image
 
 ##############################
 # Load Model
